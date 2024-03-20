@@ -1,5 +1,5 @@
-from list.listNode import ListNode
-from list.circularLinkedList import CircularLinkedList
+from listNode import ListNode
+from circularLinkedList import CircularLinkedList
 
 
 class CacheSimulator:
