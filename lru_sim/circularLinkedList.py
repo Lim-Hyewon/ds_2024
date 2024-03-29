@@ -1,4 +1,4 @@
-from list.listNode import ListNode
+from listNode import ListNode
 
 class CircularLinkedList:
     def __init__(self):
@@ -53,14 +53,16 @@ class CircularLinkedList:
             return None
 
     def get(self, *args): # i:int 대신 *args
+        # i번째 index에 저장된 value 값
         if self.isEmpty():
-            return None
+            return None # edge case 예외처리
+        
         if len(args) != 0:
-            i = args[0]
+            i = args[0] # 인자가 들어왔을 때 index 설정
         if len(args) == 0 or i == -1:
             i = self.__numItems - 1
         if (i >= 0 and i <= self.__numItems - 1):
-            return self.__getNode(i).item
+            return self.getNode(i).item
         else:
             return None
 
