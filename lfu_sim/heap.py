@@ -11,7 +11,7 @@ class MinHeap:
 
     def __percolateUp(self, i:int):
         parent = (i-1)//2
-        if i > 0 and self.__A[i] < self.__A[parent]: # freq 기준으로 비교하게끔..
+        if i > 0 and self.__A[i] < self.__A[parent]: # frq 기준으로 비교하게끔..
             self.__A[i], self.__A[parent] = self.__A[parent], self.__A[i]
             self.__percolateUp(parent)
 
@@ -56,8 +56,17 @@ class MinHeap:
     def size(self):
         return len(self.__A)
     
-    def heapPrint(self):
-        ...
+    def getIndex(self, lpn):
+        for idx, val in enumerate(self.__A):
+            if val.lpn == lpn:
+                return idx
+        return -1
+    
+    def getNode(self, idx):
+        return self.__A[idx]
+
+    # def heapPrint(self):
+    #     ...
 
 import random as rd
 
