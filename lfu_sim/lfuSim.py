@@ -25,52 +25,36 @@ def lfu_sim(cache_slots):
   data_file = open("linkbench.trc")
 
   hp = MinHeap()
-  frq_dict.clear()
+  frq_dict.clear() # initialization
 
   for line in data_file.readlines():
     lpn = line.split()[0]
     tot_cnt += 1
 
-    if lpn not in frq_dict: # 초기화
+    if lpn not in frq_dict: # initialization
       frq_dict[lpn] = None
       
     n = Node(lpn)
 
-    if hp.size() < cache_slots: # cache 빈 공간 o
-      if n.frq == None: # 처음 나온 lpn
-        n.frq = 1
-        frq_dict.update({lpn:n.frq})
-        hp.insert(n)
-
-      else: # 이미 나온 적 있는 lpn
-        n.frq += 1
-        frq_dict.update({lpn:n.frq})
-        idx = hp.getIndex(lpn)
-        if idx != -1: # lpn in cache
-          hp.getNode(idx).frq += 1
-          hp.percolateDown(idx)
-          cache_hit += 1
-        else: # lpn not in cache
-          hp.insert(n) 
-
-    else: # cache 빈 공간 x
-      if n.frq == None: # 처음 나온 lpn
-        n.frq = 1
-        frq_dict.update({lpn:n.frq})
+    if n.frq == None: # lpn first appeared
+      n.frq = 1
+      frq_dict.update({lpn:n.frq})
+      if hp.size() >= cache_slots: # full cache slot
         hp.deleteMin()
-        hp.insert(n)
-
-      else: # 이미 나온 적 있는 lpn
-        n.frq += 1
-        frq_dict.update({lpn:n.frq})
-        idx = hp.getIndex(lpn)
-        if idx != -1: # lpn in cache
-          hp.getNode(idx).frq += 1
-          hp.percolateDown(idx)
-          cache_hit += 1
-        else:  # lpn not in cache
+      hp.insert(n)
+      
+    else: # lpn already appeared
+      n.frq += 1
+      frq_dict.update({lpn:n.frq})
+      idx = hp.getIndex(lpn)
+      if idx != -1: # lpn in cache
+        hp.getNode(idx).frq += 1
+        hp.percolateDown(idx)
+        cache_hit += 1
+      else: # lpn not in cache
+        if hp.size() >= cache_slots: # full cache slot
           hp.deleteMin()
-          hp.insert(n)
+        hp.insert(n)
 
   print("cache_slot = ", cache_slots, "cache_hit = ", cache_hit, "hit ratio = ", cache_hit / tot_cnt)
 
